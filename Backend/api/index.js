@@ -13,7 +13,14 @@ const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
 const client = twilio(accountSid, authToken);
 
 
-app.use(cors());
+// Middleware
+app.use(helmet());
+app.use(bodyParser.json());
+app.use(cors({
+  origin: 'https://twilio-node-sms-sending-feature-frontend.vercel.app/', 
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'], 
+}));
 
 app.use(express.json());
 
