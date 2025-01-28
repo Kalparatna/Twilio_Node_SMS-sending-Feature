@@ -20,7 +20,8 @@ app.use(bodyParser.json());
 app.use(
   cors({
     origin: [
-      "https://twilio-node-sms-sending-feature-frontend.vercel.app/", // Production frontend
+      "https://twilio-node-sms-sending-feature-frontend.vercel.app", // Frontend URL in production
+      // You can also include other origins or use "*" in development for testing
     ],
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
