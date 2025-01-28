@@ -16,10 +16,9 @@ const Contact = () => {
     }
 
     try {
+      // Directly use the deployed backend URL
       const response = await axios.post(
-        process.env.NODE_ENV === "production"
-          ? "twilio-node-sms-sending-feature-backend.vercel.app"
-          : "http://localhost:3000/send-sms", // Switch URLs based on environment
+        "https://twilio-node-sms-sending-feature-backend.vercel.app/send-sms", // Your deployed backend URL
         {
           to: phoneNumber,
           message: message,
@@ -27,7 +26,6 @@ const Contact = () => {
       );
 
       if (response.data.success) {
-        console.log("Message sent successfully:", response.data);
         setStatusMessage("Message sent successfully!");
         setPhoneNumber("");
         setMessage("");
