@@ -1,7 +1,7 @@
-// Vite-React-Portfolio-main/src/components/contact.jsx
 import React, { useState } from "react";
 import axios from "axios";
-import './contact.css'; 
+import './contact.css';
+
 const Contact = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [message, setMessage] = useState("");
@@ -16,15 +16,18 @@ const Contact = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/send-sms", {
-        to: phoneNumber,
-        message: message,
-      });
+      const response = await axios.post(
+        process.env.NODE_ENV === "production"
+          ? "twilio-node-sms-backend.vercel.app"
+          : "http://localhost:3000/send-sms", // Switch URLs based on environment
+        {
+          to: phoneNumber,
+          message: message,
+        }
+      );
 
       if (response.data.success) {
-        // Log the message sent from the backend response
         console.log("Message sent successfully:", response.data);
-
         setStatusMessage("Message sent successfully!");
         setPhoneNumber("");
         setMessage("");
@@ -60,7 +63,6 @@ const Contact = () => {
         </div>
         <button type="submit">Send SMS</button>
       </form>
-
       {statusMessage && <p>{statusMessage}</p>}
     </div>
   );
