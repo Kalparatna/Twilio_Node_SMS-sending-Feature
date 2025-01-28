@@ -18,7 +18,7 @@ const Contact = () => {
     try {
       const response = await axios.post(
         process.env.NODE_ENV === "production"
-          ? "twilio-node-sms-backend.vercel.app"
+          ? "twilio-node-sms-sending-feature-backend.vercel.app"
           : "http://localhost:3000/send-sms", // Switch URLs based on environment
         {
           to: phoneNumber,
