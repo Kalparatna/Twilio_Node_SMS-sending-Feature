@@ -1,4 +1,3 @@
-require("dotenv").config();
 const express = require("express");
 const twilio = require("twilio");
 const cors = require("cors");
@@ -8,6 +7,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Use environment variables from Vercel directly
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
@@ -21,7 +21,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173", // Local frontend
-      "https://twilio-node-sms-sending-feature-frontend.vercel.app/", 
+      "https://twilio-node-sms-sending-feature-frontend.vercel.app/", // Production frontend
     ],
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
@@ -30,6 +30,7 @@ app.use(
 
 app.use(express.json());
 
+// Send SMS route
 app.post("/send-sms", async (req, res) => {
   const { to, message } = req.body;
 
