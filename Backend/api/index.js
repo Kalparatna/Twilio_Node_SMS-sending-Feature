@@ -1,10 +1,12 @@
-
 require("dotenv").config();
 const express = require("express");
 const twilio = require("twilio");
-const cors = require("cors");  
+const cors = require("cors");
+const helmet = require("helmet");
+const bodyParser = require("body-parser");
+
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -12,18 +14,21 @@ const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER;
 
 const client = twilio(accountSid, authToken);
 
-
 // Middleware
 app.use(helmet());
 app.use(bodyParser.json());
-app.use(cors({
-  origin: 'https://twilio-node-sms-sending-feature-frontend.vercel.app/', 
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type'], 
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173", // Local frontend
+      "https://twilio-node-sms-sending-feature-frontend.vercel.app/", 
+    ],
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
 
 app.use(express.json());
-
 
 app.post("/send-sms", async (req, res) => {
   const { to, message } = req.body;
@@ -36,7 +41,7 @@ app.post("/send-sms", async (req, res) => {
     const response = await client.messages.create({
       body: message,
       from: twilioPhoneNumber,
-      to, 
+      to,
     });
 
     res.status(200).json({ success: true, messageId: response.sid });
@@ -48,5 +53,5 @@ app.post("/send-sms", async (req, res) => {
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`Server running on port ${port}`);
 });
